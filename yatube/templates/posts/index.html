@@ -14,7 +14,7 @@
             </li>
           </ul>
           <p>
-            {{post.text}}
+            {{post.text|linebreaksbr}}
           </p>
           {% if post.group %}
             <a href="{% url 'posts:group_posts' post.group.slug %}">все записи группы</a>
