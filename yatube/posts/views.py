@@ -1,6 +1,8 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
-from .models import Post, Group
+from .models import Post, Group, User
+
+def paginator
 
 def index(request):
     template = 'posts/index.html'
@@ -24,9 +26,12 @@ def group_posts(request,slug):
 
 def profile(request, username):
     template_name = 'posts/profile.html'
-    user = get_object_or_404(Post, username=username)
+    author = get_object_or_404(User, username=username)
+    posts = author.posts.all()
+    paginator = Paginator(posts, 10)
     context = {
-        'user': user
+        'posts': posts,
+        'author': author
     }
     return render(request, template_name, context)
 
