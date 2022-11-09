@@ -1,13 +1,15 @@
-
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
-
 from .models import Post, Group
 
 def index(request):
     template = 'posts/index.html'
-    posts = Post.objects.order_by('-pub_date')[:10]
+    post_list = Post.objects.all()
+    paginator = Paginator(post_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
-        'posts': posts
+        'page_obj': page_obj
     }
     return render(request, template, context)
 def group_posts(request,slug):
@@ -19,6 +21,21 @@ def group_posts(request,slug):
         'posts': posts,
     }
     return render(request, template, context)
+
+def profile(request, username):
+    template_name = 'posts/profile.html'
+    user = get_object_or_404(Post, username=username)
+    context = {
+        'user': user
+    }
+    return render(request, template_name, context)
+
+
+def post_detail(request, post_id):
+    # Здесь код запроса к модели и создание словаря контекста
+    context = {
+    }
+    return render(request, 'posts/post_detail.html', context)
 
 
 # Create your views here.
