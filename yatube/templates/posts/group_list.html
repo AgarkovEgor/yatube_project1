@@ -6,7 +6,7 @@
         <p>
           {{ group.description }}
         </p>
-        {% for post in posts %}
+        {% for post in page_obj %}
         <article>
           <ul>
             <li>
@@ -22,5 +22,6 @@
         </article>
         <hr>
         {% endfor %}
+        {% include 'posts/includes/paginator.html' %}
       </div>
 {% endblock %}
