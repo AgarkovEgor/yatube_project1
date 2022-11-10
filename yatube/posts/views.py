@@ -1,7 +1,8 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Group, User
-from .forms import PostForms
+from .forms import PostForm
 
 def paginator_func(post_list,request):
     paginator = Paginator(post_list, 10)
@@ -45,9 +46,15 @@ def post_detail(request, post_id):
     }
     return render(request, template_name, context)
 
+@login_required
 def post_create(request):
     template_name = 'posts/post_create.html'
-    form = PostForms
+    form = PostForm(request.POST)
+    if request.method == 'POST' and form.is_valid():
+        new_post = form.save(commit=False)
+        new_post.author = request.user
+        new_post.save()
+        return redirect('post:profile')
     contex = {
         'form': form
     }
