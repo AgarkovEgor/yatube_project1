@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from .models import Post, Group, User
+from .forms import PostForms
 
 def paginator_func(post_list,request):
     paginator = Paginator(post_list, 10)
@@ -43,6 +44,14 @@ def post_detail(request, post_id):
         'post': post
     }
     return render(request, template_name, context)
+
+def post_create(request):
+    template_name = 'posts/post_create.html'
+    form = PostForms
+    contex = {
+        'form': form
+    }
+    return render(request, template_name, contex)
 
 
 # Create your views here.
