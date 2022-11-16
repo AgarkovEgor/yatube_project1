@@ -49,16 +49,44 @@ def post_detail(request, post_id):
 @login_required
 def post_create(request):
     template_name = 'posts/post_create.html'
-    form = PostForm(request.POST)
+    form = PostForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         new_post = form.save(commit=False)
         new_post.author = request.user
         new_post.save()
-        return redirect('post:profile')
+        return redirect('posts:profile',new_post.author)
     contex = {
         'form': form
     }
     return render(request, template_name, contex)
+
+@login_required
+def post_edit(request,post_id):
+    template_name = 'posts/post_create.html'
+    post = get_object_or_404(Post, pk=post_id)
+    if request.user != post.author:
+        return redirect('posts:post_detail', post.id)
+    form = PostForm(request.POST or None)
+    if form.is_valid():
+        new_post = form.save()
+        return redirect('posts:post_detail', post.id)
+    context = {
+        'form' : form,
+        'is_edit': True
+    }
+    return render(request, template_name, context)
+
+
+    # Получить пост
+    # Проверка автор или нет
+    #     Редирект на страницу поста
+    # создаем форму
+    # Елси валидна
+    #     сохраняем изменения
+    #     редирект на страницу поста
+    # передаем данные с словарь
+    # рендер
+
 
 
 # Create your views here.
