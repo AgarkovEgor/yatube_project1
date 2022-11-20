@@ -32,8 +32,8 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts = author.posts.all()
     context = {
+        'author': author,
         'page_obj': paginator_func(post_list=posts,request=request),
-        'author': author
     }
     return render(request, template_name, context)
 

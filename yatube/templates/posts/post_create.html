@@ -1,12 +1,24 @@
 {% extends 'base.html' %}
-{%  block title %} Новый пост {% endblock %}
+{% block title %}
+  {% if is_edit %}
+    Редактировать пост
+  {% else %}
+    Добавить пост
+  {% endif %}
+{% endblock %}
 {% block content %}
 {% load user_filters %}
       <div class="container py-5">
         <div class="row justify-content-center">
           <div class="col-md-8 p-5">
             <div class="card">
-              <div class="card-header">Новый пост</div>
+              <div class="card-header">
+                  {% if is_edit %}
+              Редактировать пост
+            {% else %}
+              Добавить пост
+            {% endif %}
+              </div>
               <div class="card-body">
                   {% if form.errors %}
                     {% for field in form %}
