@@ -46,15 +46,15 @@ class PostFormTests(TestCase):
 
     def test_post_edit(self):
         """Проверка изменения поста"""
-        post_count = Post.objects.count()
-        form_data = {'text': 'Измененный пост', 'group': self.post.group.title}
+        posts_count = Post.objects.count()
+        form_data = {"text": "Измененный пост", "group": self.post.group.id}
         response = self.authorized_client.post(
-            reverse('posts:post_edit', kwargs={'post_id': self.post.id}),
+            reverse("posts:post_edit", args=[self.post.id]),
             data=form_data,
-            follow=True
+            follow=True,
         )
-        self.assertEqual(Post.objects.count(), post_count)
-        self.assertRedirects(response, reverse(
-            'posts:profile', kwargs={'username': self.post.author}))
-        self.assertTrue(Post.objects.filter(text='Измененный пост').exists())
+        self.assertRedirects(
+            response, reverse("posts:post_detail",args=[self.post.id]))
+        self.assertEqual(Post.objects.count(), posts_count)
+        self.assertTrue(Post.objects.filter(text="Измененный пост",group=self.group.id).exists())
         self.assertEqual(response.status_code, HTTPStatus.OK)

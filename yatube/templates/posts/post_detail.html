@@ -32,6 +32,9 @@
           <p>
             {{post.text}}
           </p>
+            <button href="{% url 'posts:post_edit' post.id %}"  class="btn btn-primary">
+                      Редактировать пост
+                    </button>
         </article>
       </div>
 {% endblock %}
